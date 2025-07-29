@@ -1,3 +1,4 @@
+// Package main provides the main entry point for the simplebank application.
 package main
 
 import (
@@ -24,7 +25,7 @@ func main() {
 	defer conn.Close()
 
 	store := db.NewStore(conn)
-	server := api.NewServer(store)
+	server := api.NewServer(config, store)
 
 	err = server.Run(config.ServerAddress)
 	if err != nil {
