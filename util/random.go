@@ -28,6 +28,11 @@ func RandomString(length int) string {
 	return sb.String()
 }
 
+// RandomEmail generates random email
+func RandomEmail() string {
+	return RandomString(8) + "@gmail.com"
+}
+
 // RandomOwner generates random owner
 func RandomOwner() string {
 	return RandomString(8)
