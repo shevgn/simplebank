@@ -135,12 +135,10 @@ func TestGetAccountAPI(t *testing.T) {
 
 func TestCreateAccountAPI(t *testing.T) {
 	req := CreateAccountRequest{
-		Owner:    util.RandomOwner(),
 		Currency: util.RandomCurrency(),
 	}
 
 	arg := db.CreateAccountParams{
-		Owner:    req.Owner,
 		Currency: req.Currency,
 		Balance:  0,
 	}
@@ -200,7 +198,6 @@ func TestCreateAccountAPI(t *testing.T) {
 		{
 			name: "InvalidCurrency",
 			requestBody: CreateAccountRequest{
-				Owner:    "owner",
 				Currency: "invalid",
 			},
 			buildStubs: func(store *mockdb.MockStore) {
