@@ -88,13 +88,13 @@ func TestCreateUserAPI(t *testing.T) {
 
 	testCases := []struct {
 		name          string
-		requestBody   CreateUserRequest
+		requestBody   createUserRequest
 		buildStubs    func(store *mockdb.MockStore)
 		checkResponse func(t *testing.T, recorder *httptest.ResponseRecorder)
 	}{
 		{
 			name: "OK",
-			requestBody: CreateUserRequest{
+			requestBody: createUserRequest{
 				Username: user.Username,
 				Password: password,
 				FullName: user.FullName,
@@ -113,7 +113,7 @@ func TestCreateUserAPI(t *testing.T) {
 		},
 		{
 			name: "InternalServerError",
-			requestBody: CreateUserRequest{
+			requestBody: createUserRequest{
 				Username: user.Username,
 				Password: password,
 				FullName: user.FullName,
@@ -131,7 +131,7 @@ func TestCreateUserAPI(t *testing.T) {
 		},
 		{
 			name:        "BadRequest",
-			requestBody: CreateUserRequest{},
+			requestBody: createUserRequest{},
 			buildStubs: func(store *mockdb.MockStore) {
 				store.EXPECT().
 					CreateUser(gomock.Any(), EqCreateUserParams(arg, password)).
@@ -143,7 +143,7 @@ func TestCreateUserAPI(t *testing.T) {
 		},
 		{
 			name: "ShortPassword",
-			requestBody: CreateUserRequest{
+			requestBody: createUserRequest{
 				Username: user.Username,
 				Password: password[:6],
 				FullName: user.FullName,
@@ -160,7 +160,7 @@ func TestCreateUserAPI(t *testing.T) {
 		},
 		{
 			name: "LongPassword",
-			requestBody: CreateUserRequest{
+			requestBody: createUserRequest{
 				Username: user.Username,
 				Password: util.RandomString(73),
 				FullName: user.FullName,
@@ -177,7 +177,7 @@ func TestCreateUserAPI(t *testing.T) {
 		},
 		{
 			name: "InvalidEmail",
-			requestBody: CreateUserRequest{
+			requestBody: createUserRequest{
 				Username: user.Username,
 				Password: password,
 				FullName: user.FullName,
@@ -192,24 +192,6 @@ func TestCreateUserAPI(t *testing.T) {
 				require.Equal(t, http.StatusBadRequest, recorder.Code)
 			},
 		},
-		// {
-		// 	name: "DuplicateUsername",
-		// 	requestBody: CreateUserRequest{
-		// 		Username: user.Username,
-		// 		Password: password,
-		// 		FullName: user.FullName,
-		// 		Email:    user.Email,
-		// 	},
-		// 	buildStubs: func(store *mockdb.MockStore) {
-		// 		store.EXPECT().
-		// 			CreateUser(gomock.Any(), gomock.Any()).
-		// 			Times(1).
-		// 			Return(db.User{}, &pgconn.PgError{Code: "23505"})
-		// 	},
-		// 	checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
-		// 		require.Equal(t, http.StatusConflict, recorder.Code)
-		// 	},
-		// },
 	}
 
 	for _, tc := range testCases {
