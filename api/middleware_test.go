@@ -20,7 +20,7 @@ func addAuthorization(
 	username string,
 	duration time.Duration,
 ) {
-	token, err := tm.CreateToken(username, duration)
+	token, _, err := tm.CreateToken(username, duration)
 	require.NoError(t, err)
 
 	req.Header.Set(authorizationHeaderKey, fmt.Sprintf("%s %s", authType, token))
